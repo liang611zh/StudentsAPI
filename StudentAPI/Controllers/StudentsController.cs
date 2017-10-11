@@ -9,9 +9,11 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Http.Description;
 using StudentAPI.Models;
+using System.Web.Http.Cors;
 
 namespace StudentAPI.Controllers
 {
+    [EnableCors("*","*","GET")]
     [Authorize]
     public class StudentsController : ApiController
     {

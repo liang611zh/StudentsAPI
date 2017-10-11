@@ -16,11 +16,13 @@ using Microsoft.Owin.Security.OAuth;
 using StudentAPI.Models;
 using StudentAPI.Providers;
 using StudentAPI.Results;
+using System.Web.Http.Cors;
 
 namespace StudentAPI.Controllers
 {
     [Authorize]
     [RoutePrefix("api/Account")]
+    [EnableCors("*","*","*")]
     public class AccountController : ApiController
     {
         private const string LocalLoginProvider = "Local";

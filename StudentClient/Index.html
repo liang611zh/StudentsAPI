@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="Scripts/jquery-3.2.1.js"></script>
+</head>
+<body>
+    <h3>Cors Request</h3>
+
+    <form id="frmRegister">
+        <input type="text" name="Email" placeholder="Email" />
+        <input type="password" name="password" placeholder="Password" />
+        <input type="password" name="confirmPassword" placeholder="Confirm Password" />
+        <input type="button" id="btnRegister" value="Register" />
+    </form>
+    <form id="frmLogin">
+        <input type="text" name="userName" placeholder="UserName" />
+        <input type="password" name="password" placeholder="Password" />
+        <input type="button" id="btnLogin" value="Login" />
+    </form>
+
+    <button id="btnGetPatients">Get Patients</button>
+    <pre id="preOutput"></pre>
+    <script src="Scripts/jquery-3.2.1.js"></script>
+    <script>
+        $(function () {
+            var accessToken = "";
+            let baseUrl = "http://comp4976api.azurewebsites.net";
+        //var getPatients = function () {
+        //var url = baseUrl+"/api/Students/";
+        //$.get(url).always(showResponse);
+        //return false;
+        //    };
+
+            var getPatients = function () {
+            var url = baseUrl + "/api/students/";
+            $.ajax(url, {
+                type: "GET",
+                headers: getHeaders()
+            }).always(showResponse);
+            return false;
+        };
+
+    var showResponse = function (object) {
+      $("#preOutput").text(JSON.stringify(object, null, 4));
+    };
+
+        $("#btnGetPatients").click(getPatients);
+        var register = function () {
+            var url = baseUrl+"/api/account/register";
+            var data = $("#frmRegister").serialize();
+            $.post(url, data).always(showResponse);
+            return false;
+        };
+
+        $("#btnRegister").click(register);
+
+        //var login = function () {
+        //    var url = baseUrl + "/Token";
+        //    var data = $("#frmLogin").serialize();
+        //    data += "&grant_type=password";
+        //    $.post(url, data).always(showResponse);
+        //    return false;
+        // };
+        var login = function () {
+            var url = baseUrl + "/Token";
+            var data = $("#frmLogin").serialize();
+            data += "&grant_type=password";
+            $.post(url, data)
+                .done(saveAccessToken)
+                .always(showResponse);
+            return false;
+        };
+        var saveAccessToken = function (data) {
+            accessToken = data.access_token;
+        };
+        var getHeaders = function () {
+            if (accessToken) {
+                return { "Authorization": "Bearer " + accessToken };
+            }
+        };
+
+        $("#btnLogin").click(login);
+  });
+    </script>
+</body>
+</html>
